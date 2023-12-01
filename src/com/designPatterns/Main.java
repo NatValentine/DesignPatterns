@@ -8,6 +8,9 @@ import com.designPatterns.iterator.Iterator;
 import com.designPatterns.javaBasics.*;
 import com.designPatterns.memento.Editor;
 import com.designPatterns.memento.History;
+import com.designPatterns.observer.Chart;
+import com.designPatterns.observer.DataSource;
+import com.designPatterns.observer.SpreadSheet;
 import com.designPatterns.state.Canvas;
 import com.designPatterns.state.SelectionTool;
 import com.designPatterns.strategy.BWFilter;
@@ -15,6 +18,8 @@ import com.designPatterns.strategy.ImageStorage;
 import com.designPatterns.strategy.JpegCompressor;
 import com.designPatterns.templateMethod.Task;
 import com.designPatterns.templateMethod.TransferMoneyTask;
+
+import javax.xml.crypto.Data;
 
 public class Main {
     public static void main(String[] args) {
@@ -119,6 +124,20 @@ public class Main {
             composite.add(new ResizeCommand());
             composite.add(new BlackAndWhiteCommand());
             composite.execute();
+        }
+
+        // OBSERVER PATTERN
+        {
+            DataSource dataSource = new DataSource();
+            SpreadSheet sheet1 = new SpreadSheet();
+            SpreadSheet sheet2 = new SpreadSheet();
+            Chart chart = new Chart();
+
+            dataSource.addObserver(sheet1);
+            dataSource.addObserver(sheet2);
+            dataSource.addObserver(chart);
+
+            dataSource.setValue(1);
         }
     }
 
