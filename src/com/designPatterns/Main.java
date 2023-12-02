@@ -6,6 +6,7 @@ import com.designPatterns.command.fx.Command;
 import com.designPatterns.iterator.BrowseHistory;
 import com.designPatterns.iterator.Iterator;
 import com.designPatterns.javaBasics.*;
+import com.designPatterns.mediator.ArticlesDialogBox;
 import com.designPatterns.memento.Editor;
 import com.designPatterns.memento.History;
 import com.designPatterns.observer.Chart;
@@ -138,6 +139,12 @@ public class Main {
             dataSource.addObserver(chart);
 
             dataSource.setValue(1);
+        }
+
+        // MEDIATOR PATTERN
+        {
+            var dialog = new ArticlesDialogBox();
+            dialog.simulateUserInteraction();
         }
     }
 
