@@ -27,8 +27,8 @@ public class ArticlesDialogBox extends DialogBox {
     }
 
     private void titleChanged() {
-        var content = titleTextBox.getContent();
-        var isEmpty = (content == null || content.isEmpty());
+        String content = titleTextBox.getContent();
+        boolean isEmpty = (content == null || content.isEmpty());
         saveButton.setEnabled(!isEmpty);
     }
 }

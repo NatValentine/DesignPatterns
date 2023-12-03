@@ -1,5 +1,6 @@
 package com.designPatterns;
 
+import com.designPatterns.chainOfResponsibility.*;
 import com.designPatterns.command.*;
 import com.designPatterns.command.fx.Button;
 import com.designPatterns.command.fx.Command;
@@ -19,6 +20,7 @@ import com.designPatterns.strategy.ImageStorage;
 import com.designPatterns.strategy.JpegCompressor;
 import com.designPatterns.templateMethod.Task;
 import com.designPatterns.templateMethod.TransferMoneyTask;
+import com.designPatterns.visitor.*;
 
 import javax.xml.crypto.Data;
 
@@ -96,7 +98,7 @@ public class Main {
 
             Iterator<String> iterator = history.createIterator();
             while (iterator.hasNext()) {
-                var url = iterator.current();
+                String url = iterator.current();
                 System.out.println(url);
                 iterator.next();
             }
@@ -143,8 +145,28 @@ public class Main {
 
         // MEDIATOR PATTERN
         {
-            var dialog = new ArticlesDialogBox();
+            ArticlesDialogBox dialog = new ArticlesDialogBox();
             dialog.simulateUserInteraction();
+        }
+
+        // CHAIN OF RESPONSIBILITY PATTERN
+        {
+            // chain: auth -> log -> compress
+            Compressor compressor = new Compressor(null);
+            Logger logger = new Logger(compressor);
+            Authenticator authenticator = new Authenticator(logger);
+
+            WebServer server = new WebServer(authenticator);
+
+            server.handle(new HttpRequest("admin", "124"));
+        }
+
+        // VISITOR PATTERN
+        {
+            HtmlDocument document = new HtmlDocument();
+            document.add(new HeadingNode());
+            document.add(new AnchorNode());
+            document.execute(new PlainTextOperation());
         }
     }
 
