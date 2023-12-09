@@ -1,172 +1,258 @@
 package com.designPatterns;
 
-import com.designPatterns.chainOfResponsibility.*;
-import com.designPatterns.command.*;
-import com.designPatterns.command.fx.Button;
-import com.designPatterns.command.fx.Command;
-import com.designPatterns.iterator.BrowseHistory;
-import com.designPatterns.iterator.Iterator;
+import com.designPatterns.behavioralPatterns.chainOfResponsibility.*;
+import com.designPatterns.behavioralPatterns.command.*;
+import com.designPatterns.behavioralPatterns.command.fx.Button;
+import com.designPatterns.behavioralPatterns.command.fx.Command;
+import com.designPatterns.behavioralPatterns.iterator.BrowseHistory;
+import com.designPatterns.behavioralPatterns.iterator.Iterator;
 import com.designPatterns.javaBasics.*;
-import com.designPatterns.mediator.ArticlesDialogBox;
-import com.designPatterns.memento.Editor;
-import com.designPatterns.memento.History;
-import com.designPatterns.observer.Chart;
-import com.designPatterns.observer.DataSource;
-import com.designPatterns.observer.SpreadSheet;
-import com.designPatterns.state.Canvas;
-import com.designPatterns.state.SelectionTool;
-import com.designPatterns.strategy.BWFilter;
-import com.designPatterns.strategy.ImageStorage;
-import com.designPatterns.strategy.JpegCompressor;
-import com.designPatterns.templateMethod.Task;
-import com.designPatterns.templateMethod.TransferMoneyTask;
-import com.designPatterns.visitor.*;
-
-import javax.xml.crypto.Data;
+import com.designPatterns.behavioralPatterns.mediator.ArticlesDialogBox;
+import com.designPatterns.behavioralPatterns.memento.Editor;
+import com.designPatterns.behavioralPatterns.memento.History;
+import com.designPatterns.behavioralPatterns.observer.Chart;
+import com.designPatterns.behavioralPatterns.observer.DataSource;
+import com.designPatterns.behavioralPatterns.observer.SpreadSheet;
+import com.designPatterns.behavioralPatterns.state.Canvas;
+import com.designPatterns.behavioralPatterns.state.SelectionTool;
+import com.designPatterns.behavioralPatterns.strategy.BWFilter;
+import com.designPatterns.behavioralPatterns.strategy.ImageStorage;
+import com.designPatterns.behavioralPatterns.strategy.JpegCompressor;
+import com.designPatterns.behavioralPatterns.templateMethod.Task;
+import com.designPatterns.behavioralPatterns.templateMethod.TransferMoneyTask;
+import com.designPatterns.behavioralPatterns.visitor.*;
+import com.designPatterns.structuralPatterns.adapter.CaramelFilter;
+import com.designPatterns.structuralPatterns.adapter.Image;
+import com.designPatterns.structuralPatterns.adapter.ImageView;
+import com.designPatterns.structuralPatterns.adapter.externalFilters.Caramel;
+import com.designPatterns.structuralPatterns.bridge.AdvancedRemoteControl;
+import com.designPatterns.structuralPatterns.bridge.SonyTV;
+import com.designPatterns.structuralPatterns.composite.Group;
+import com.designPatterns.structuralPatterns.composite.Shape;
+import com.designPatterns.structuralPatterns.decorator.CloudStream;
+import com.designPatterns.structuralPatterns.decorator.CompressedCloudStream;
+import com.designPatterns.structuralPatterns.decorator.EncriptedCloudStream;
+import com.designPatterns.structuralPatterns.decorator.Stream;
+import com.designPatterns.structuralPatterns.facade.*;
+import com.designPatterns.structuralPatterns.flyweight.Point;
+import com.designPatterns.structuralPatterns.flyweight.PointIconFactory;
+import com.designPatterns.structuralPatterns.flyweight.PointService;
+import com.designPatterns.structuralPatterns.proxy.EbookProxy;
+import com.designPatterns.structuralPatterns.proxy.Library;
+import com.designPatterns.structuralPatterns.proxy.RealEbook;
 
 public class Main {
     public static void main(String[] args) {
-        // BASICS: Coupling
+        // BASICS
         {
-            User user = new User("Nat", 2); // highly coupled
-            user.sayHello();
+            // BASICS: Coupling
+            {
+                User user = new User("Nat", 2); // highly coupled
+                user.sayHello();
 
-            TaxCalculator calculator = getCalculator(); // loosely coupled
-            calculator.calculateTax();
-        }
+                TaxCalculator calculator = getCalculator(); // loosely coupled
+                calculator.calculateTax();
+            }
 
-        // BASICS: Encapsulation: access modifiers, getters and setters
-        {
-            Account account = new Account();
-            account.deposit(10);
-            account.withdraw(2);
-            System.out.println("Current balance: " + account.getBalance());
-        }
+            // BASICS: Encapsulation: access modifiers, getters and setters
+            {
+                Account account = new Account();
+                account.deposit(10);
+                account.withdraw(2);
+                System.out.println("Current balance: " + account.getBalance());
+            }
 
-        // BASICS: Abstraction: access modifiers again, main can only see what it can actually use
-        {
-            MailService mailService = new MailService();
-            mailService.sendEmail(); // now only available method because all others are private
-        }
+            // BASICS: Abstraction: access modifiers again, main can only see what it can actually use
+            {
+                MailService mailService = new MailService();
+                mailService.sendEmail(); // now only available method because all others are private
+            }
 
-        // BASICS: Inheritance
-        {
-            UIControl txtBox = new TextBox();
-            txtBox.enable();
-        }
+            // BASICS: Inheritance
+            {
+                UIControl txtBox = new TextBox();
+                txtBox.enable();
+            }
 
-        // BASICS: Polymorphism
-        {
-            UIControl textBox = new TextBox();
-            UIControl checkBox = new CheckBox();
-            drawUIControl(textBox);
-            drawUIControl(checkBox);
-        }
-
-        // MEMENTO PATTERN
-        {
-            Editor editor = new Editor();
-            History history = new History();
-
-            editor.setContent("a");
-            history.push(editor.createState());
-
-            editor.setContent("b");
-            history.push(editor.createState());
-
-            editor.setContent("c");
-            history.push(editor.createState());
-
-            editor.restore(history.pop()); // undo "c"
-            System.out.println(editor.getContent());
-        }
-
-        // STATE PATTERN: open (for extension) close (for modification) principle
-        {
-            Canvas canvas = new Canvas();
-            canvas.setCurrentTool(new SelectionTool());
-            canvas.mouseDown();
-            canvas.mouseUp();
-        }
-
-        // ITERATOR PATTERN
-        {
-            BrowseHistory history = new BrowseHistory();
-            history.push("url1");
-            history.push("url2");
-            history.push("url3");
-
-            Iterator<String> iterator = history.createIterator();
-            while (iterator.hasNext()) {
-                String url = iterator.current();
-                System.out.println(url);
-                iterator.next();
+            // BASICS: Polymorphism
+            {
+                UIControl textBox = new TextBox();
+                UIControl checkBox = new CheckBox();
+                drawUIControl(textBox);
+                drawUIControl(checkBox);
             }
         }
 
-        // STRATEGY PATTERN
+        // BEHAVIORAL PATTERNS
         {
-            ImageStorage imageStorage = new ImageStorage();
-            imageStorage.store("cat_picture", new JpegCompressor(), new BWFilter());
+            // MEMENTO PATTERN
+            {
+                Editor editor = new Editor();
+                History history = new History();
+
+                editor.setContent("a");
+                history.push(editor.createState());
+
+                editor.setContent("b");
+                history.push(editor.createState());
+
+                editor.setContent("c");
+                history.push(editor.createState());
+
+                editor.restore(history.pop()); // undo "c"
+                System.out.println(editor.getContent());
+            }
+
+            // STATE PATTERN: open (for extension) close (for modification) principle
+            {
+                Canvas canvas = new Canvas();
+                canvas.setCurrentTool(new SelectionTool());
+                canvas.mouseDown();
+                canvas.mouseUp();
+            }
+
+            // ITERATOR PATTERN
+            {
+                BrowseHistory history = new BrowseHistory();
+                history.push("url1");
+                history.push("url2");
+                history.push("url3");
+
+                Iterator<String> iterator = history.createIterator();
+                while (iterator.hasNext()) {
+                    String url = iterator.current();
+                    System.out.println(url);
+                    iterator.next();
+                }
+            }
+
+            // STRATEGY PATTERN
+            {
+                ImageStorage imageStorage = new ImageStorage();
+                imageStorage.store("cat_picture", new JpegCompressor(), new BWFilter());
+            }
+
+            // TEMPLATE METHOD PATTERN
+            {
+                Task task = new TransferMoneyTask();
+                task.execute();
+            }
+
+            // COMMAND PATTERN
+            {
+                CustomerService service = new CustomerService();
+                Command command = new AddCustomerCommand(service);
+                Button button = new Button(command);
+                button.click();
+
+                CompositeCommand composite = new CompositeCommand();
+                composite.add(new ResizeCommand());
+                composite.add(new BlackAndWhiteCommand());
+                composite.execute();
+            }
+
+            // OBSERVER PATTERN
+            {
+                DataSource dataSource = new DataSource();
+                SpreadSheet sheet1 = new SpreadSheet();
+                SpreadSheet sheet2 = new SpreadSheet();
+                Chart chart = new Chart();
+
+                dataSource.addObserver(sheet1);
+                dataSource.addObserver(sheet2);
+                dataSource.addObserver(chart);
+
+                dataSource.setValue(1);
+            }
+
+            // MEDIATOR PATTERN
+            {
+                ArticlesDialogBox dialog = new ArticlesDialogBox();
+                dialog.simulateUserInteraction();
+            }
+
+            // CHAIN OF RESPONSIBILITY PATTERN
+            {
+                // chain: auth -> log -> compress
+                Compressor compressor = new Compressor(null);
+                Logger logger = new Logger(compressor);
+                Authenticator authenticator = new Authenticator(logger);
+
+                WebServer server = new WebServer(authenticator);
+
+                server.handle(new HttpRequest("admin", "124"));
+            }
+
+            // VISITOR PATTERN
+            {
+                HtmlDocument document = new HtmlDocument();
+                document.add(new HeadingNode());
+                document.add(new AnchorNode());
+                document.execute(new PlainTextOperation());
+            }
         }
 
-        // TEMPLATE METHOD PATTERN
+        // STRUCTURAL PATTERNS
         {
-            Task task = new TransferMoneyTask();
-            task.execute();
-        }
+            // COMPOSITE PATTERN
+            {
+                Group group1 = new Group();
+                group1.add(new Shape());
+                group1.add(new Shape());
 
-        // COMMAND PATTERN
-        {
-            CustomerService service = new CustomerService();
-            Command command = new AddCustomerCommand(service);
-            Button button = new Button(command);
-            button.click();
+                Group group2 = new Group();
+                group1.add(new Shape());
+                group1.add(new Shape());
 
-            CompositeCommand composite = new CompositeCommand();
-            composite.add(new ResizeCommand());
-            composite.add(new BlackAndWhiteCommand());
-            composite.execute();
-        }
+                Group group = new Group();
+                group.add(group1);
+                group.add(group2);
+                group.render();
+                group.move();
+            }
 
-        // OBSERVER PATTERN
-        {
-            DataSource dataSource = new DataSource();
-            SpreadSheet sheet1 = new SpreadSheet();
-            SpreadSheet sheet2 = new SpreadSheet();
-            Chart chart = new Chart();
+            // ADAPTER PATTERN
+            {
+                ImageView imageView = new ImageView(new Image());
+                // imageView.apply(new VividFilter());
+                imageView.apply(new CaramelFilter(new Caramel()));
+            }
 
-            dataSource.addObserver(sheet1);
-            dataSource.addObserver(sheet2);
-            dataSource.addObserver(chart);
+            // DECORATOR PATTERN
+            {
+                storeCreditCard(new CompressedCloudStream(new EncriptedCloudStream(new CloudStream())));
+            }
 
-            dataSource.setValue(1);
-        }
+            // FACADE PATTERN
+            {
+                NotificationService service = new NotificationService();
+                service.send("Hello World", "target");
+            }
 
-        // MEDIATOR PATTERN
-        {
-            ArticlesDialogBox dialog = new ArticlesDialogBox();
-            dialog.simulateUserInteraction();
-        }
+            // FLYWEIGHT PATTERN
+            {
+                PointService pointService = new PointService(new PointIconFactory());
+                for (Point point : pointService.getPoints())
+                    point.draw();
+            }
 
-        // CHAIN OF RESPONSIBILITY PATTERN
-        {
-            // chain: auth -> log -> compress
-            Compressor compressor = new Compressor(null);
-            Logger logger = new Logger(compressor);
-            Authenticator authenticator = new Authenticator(logger);
+            // BRIDGE PATTERN
+            {
+                var remoteControl = new AdvancedRemoteControl(new SonyTV());
+                remoteControl.turnOn();
+                remoteControl.setChannel(5);
+                remoteControl.turnOff();
+            }
 
-            WebServer server = new WebServer(authenticator);
-
-            server.handle(new HttpRequest("admin", "124"));
-        }
-
-        // VISITOR PATTERN
-        {
-            HtmlDocument document = new HtmlDocument();
-            document.add(new HeadingNode());
-            document.add(new AnchorNode());
-            document.execute(new PlainTextOperation());
+            // PROXY PATTERN
+            {
+                Library library = new Library();
+                String[] fileNames = { "a", "b", "c" };
+                for (String fileName : fileNames)
+                    library.add(new EbookProxy(fileName));
+                library.openEbook("a");
+                library.openEbook("c");
+            }
         }
     }
 
@@ -177,5 +263,9 @@ public class Main {
 
     public static void drawUIControl(UIControl control) {
         control.draw();
+    }
+
+    public static void storeCreditCard(Stream stream) {
+        stream.write("1234-1234-1234-1234");
     }
 }
