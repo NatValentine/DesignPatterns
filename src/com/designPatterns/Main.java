@@ -6,6 +6,7 @@ import com.designPatterns.behavioralPatterns.command.fx.Button;
 import com.designPatterns.behavioralPatterns.command.fx.Command;
 import com.designPatterns.behavioralPatterns.iterator.BrowseHistory;
 import com.designPatterns.behavioralPatterns.iterator.Iterator;
+import com.designPatterns.creationalPatterns.factoryMethod.ProductsController;
 import com.designPatterns.creationalPatterns.singleton.ConfigManager;
 import com.designPatterns.javaBasics.*;
 import com.designPatterns.behavioralPatterns.mediator.ArticlesDialogBox;
@@ -271,6 +272,13 @@ public class Main {
                 ConfigManager other = ConfigManager.getInstance();
                 System.out.println(other.get("name"));
             }
+
+            // FACTORY METHOD
+            {
+                new ProductsController().listProducts();
+            }
+
+
         }
     }
 
