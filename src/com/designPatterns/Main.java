@@ -8,6 +8,10 @@ import com.designPatterns.behavioralPatterns.iterator.BrowseHistory;
 import com.designPatterns.behavioralPatterns.iterator.Iterator;
 import com.designPatterns.creationalPatterns.abstractFactory.app.ContactForm;
 import com.designPatterns.creationalPatterns.abstractFactory.materialDesign.MaterialWidgetFactory;
+import com.designPatterns.creationalPatterns.builder.MovieBuilder;
+import com.designPatterns.creationalPatterns.builder.PdfBuilder;
+import com.designPatterns.creationalPatterns.builder.Presentation;
+import com.designPatterns.creationalPatterns.builder.Slide;
 import com.designPatterns.creationalPatterns.factoryMethod.ProductsController;
 import com.designPatterns.creationalPatterns.singleton.ConfigManager;
 import com.designPatterns.javaBasics.*;
@@ -283,6 +287,19 @@ public class Main {
             // ABSTRACT FACTORY PATTERN
             {
                 new ContactForm().render(new MaterialWidgetFactory());
+            }
+
+            // BUILDER PATTERN
+            {
+                var presentation = new Presentation();
+                presentation.addSlide(new Slide("Slide 1"));
+                presentation.addSlide(new Slide("Slide 2"));
+
+                // var builder = new MovieBuilder();
+                var builder = new PdfBuilder();
+                presentation.export(builder);
+                // var movie = builder.getMovie();
+                var pdf = builder.getPdf();
             }
         }
     }
