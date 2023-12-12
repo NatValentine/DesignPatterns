@@ -6,6 +6,8 @@ import com.designPatterns.behavioralPatterns.command.fx.Button;
 import com.designPatterns.behavioralPatterns.command.fx.Command;
 import com.designPatterns.behavioralPatterns.iterator.BrowseHistory;
 import com.designPatterns.behavioralPatterns.iterator.Iterator;
+import com.designPatterns.creationalPatterns.abstractFactory.app.ContactForm;
+import com.designPatterns.creationalPatterns.abstractFactory.materialDesign.MaterialWidgetFactory;
 import com.designPatterns.creationalPatterns.factoryMethod.ProductsController;
 import com.designPatterns.creationalPatterns.singleton.ConfigManager;
 import com.designPatterns.javaBasics.*;
@@ -259,12 +261,12 @@ public class Main {
 
         // CREATIONAL PATTERNS
         {
-            // PROTOTYPE
+            // PROTOTYPE PATTERN
             {
 
             }
 
-            // SINGLETON
+            // SINGLETON PATTERN
             {
                 ConfigManager manager = ConfigManager.getInstance();
                 manager.set("name", "nat");
@@ -273,12 +275,15 @@ public class Main {
                 System.out.println(other.get("name"));
             }
 
-            // FACTORY METHOD
+            // FACTORY METHOD PATTERN
             {
                 new ProductsController().listProducts();
             }
 
-
+            // ABSTRACT FACTORY PATTERN
+            {
+                new ContactForm().render(new MaterialWidgetFactory());
+            }
         }
     }
 
